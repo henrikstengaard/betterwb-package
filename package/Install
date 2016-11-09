@@ -1,0 +1,112 @@
+; BetterWB Package Install Script
+; -------------------------------
+;
+; Author: Henrik Noerfjand Stengaard
+; Date: 2016-11-07
+;
+; This script extracts and installs adf files for BetterWB Package. 
+
+
+echo "Installing 'MISC31_#1.adf'..."
+unadf >NIL: PACKAGEDIR:MISC31_#1.adf DEST=PACKAGEDIR:
+copy PACKAGEDIR:Misc3.1/BetterWB.readme.txt INSTALLDIR:Locale/Help
+unzip >NIL: -o PACKAGEDIR:Misc3.1/BetterWB1.zip -d INSTALLDIR:
+
+
+echo "Installing 'TOOLS31_#2.adf'..."
+unadf >NIL: PACKAGEDIR:TOOLS31_#2.adf DEST=PACKAGEDIR:
+unzip >NIL: -o PACKAGEDIR:Tools3.1/BetterWB2.zip -d INSTALLDIR:
+
+
+echo "Installing 'BONUS31_#3.adf'..."
+unadf >NIL: PACKAGEDIR:BONUS31_#3.adf DEST=PACKAGEDIR:
+unzip >NIL: -o PACKAGEDIR:Bonus3.1/BetterWB3.zip -d INSTALLDIR:
+
+
+echo "Installing 'DOCS31_#4.adf'..."
+unadf >NIL: PACKAGEDIR:DOCS31_#4.adf DEST=PACKAGEDIR:
+unzip >NIL: -o PACKAGEDIR:Docs3.1/BetterWB4.zip -d INSTALLDIR:
+
+
+echo "Installing 'ICONS31_#5.adf'..."
+unadf >NIL: PACKAGEDIR:ICONS31_#5.adf DEST=PACKAGEDIR:
+unzip >NIL: -o PACKAGEDIR:Icons3.1/BetterWB5.zip -d INSTALLDIR:
+
+
+echo "Installing 'DRIVERS31_#6.adf'..."
+unadf >NIL: PACKAGEDIR:DRIVERS31_#6.adf DEST=PACKAGEDIR:
+unzip >NIL: -o PACKAGEDIR:Drivers3.1/BetterWB6.zip -d INSTALLDIR:
+
+
+; Delete obsolete files
+delete >NIL: INSTALLDIR:S/BRUtab force all
+delete >NIL: INSTALLDIR:S/HDBackup.config force all
+delete >NIL: INSTALLDIR:Tools/calculator force all
+delete >NIL: INSTALLDIR:Tools/calculator.info force all
+delete >NIL: INSTALLDIR:Tools/BRU force all
+delete >NIL: INSTALLDIR:Tools/HDBackup.help force all
+delete >NIL: INSTALLDIR:Tools/HDBackup.info force all
+delete >NIL: INSTALLDIR:Tools/HDBackup force all
+delete >NIL: INSTALLDIR:Tools/Showconfig.info force all
+delete >NIL: INSTALLDIR:Tools/Showconfig force all
+delete >NIL: INSTALLDIR:System/NoFastMem force all
+delete >NIL: INSTALLDIR:System/NoFastMem.info force all
+delete >NIL: INSTALLDIR:Tools/Commodities/Clicktofront force all
+delete >NIL: INSTALLDIR:Tools/Commodities/Clicktofront.info force all
+delete >NIL: INSTALLDIR:Tools/PrepCard.info force all
+
+
+; Fix read write execute flags
+protect >NIL: INSTALLDIR:#? +rwe ALL
+
+
+; Fix CBM Pure bit bug
+Protect INSTALLDIR:C/AddBuffers +p
+Protect INSTALLDIR:C/AddDataTypes +p
+Protect INSTALLDIR:C/Assign +p
+Protect INSTALLDIR:C/Avail +p
+Protect INSTALLDIR:C/Break +p
+Protect INSTALLDIR:C/ChangeTaskPri +p
+Protect INSTALLDIR:C/ConClip +p
+Protect INSTALLDIR:C/Copy +p
+Protect INSTALLDIR:C/CPU +p
+Protect INSTALLDIR:C/Date +p
+Protect INSTALLDIR:C/Delete +p
+Protect INSTALLDIR:C/Dir +p
+Protect INSTALLDIR:C/DiskChange +p
+Protect INSTALLDIR:C/Ed +p
+Protect INSTALLDIR:C/Edit +p
+Protect INSTALLDIR:C/Eval +p
+Protect INSTALLDIR:C/Execute +p
+Protect INSTALLDIR:C/Filenote +p
+Protect INSTALLDIR:C/IconX +p
+Protect INSTALLDIR:C/Info +p
+Protect INSTALLDIR:C/Install +p
+Protect INSTALLDIR:C/Join +p
+Protect INSTALLDIR:C/List +p
+Protect INSTALLDIR:C/Lock +p
+Protect INSTALLDIR:C/MagTape +p
+Protect INSTALLDIR:C/MakeDir +p
+Protect INSTALLDIR:C/MakeLink +p
+Protect INSTALLDIR:C/Mount +p
+Protect INSTALLDIR:C/Protect +p
+Protect INSTALLDIR:C/Relabel +p
+Protect INSTALLDIR:C/RemRAD +p
+Protect INSTALLDIR:C/Rename +p
+Protect INSTALLDIR:C/RequestChoice +p
+Protect INSTALLDIR:C/RequestFile +p
+Protect INSTALLDIR:C/Search +p
+Protect INSTALLDIR:C/SetClock +p
+Protect INSTALLDIR:C/SetDate +p
+Protect INSTALLDIR:C/SetFont +p
+Protect INSTALLDIR:C/SetKeyboard +p
+Protect INSTALLDIR:C/Sort +p
+Protect INSTALLDIR:C/Status +p
+Protect INSTALLDIR:C/Type +p
+Protect INSTALLDIR:C/Version +p
+
+
+; Add the S bit to some scripts
+Protect INSTALLDIR:System/Rebooter +s
+Protect INSTALLDIR:System/HardWiz +s
+Protect INSTALLDIR:Tools/PrepCard+ +s
