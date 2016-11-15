@@ -2,111 +2,111 @@
 ; -------------------------------
 ;
 ; Author: Henrik Noerfjand Stengaard
-; Date: 2016-11-07
+; Date: 2016-11-14
 ;
 ; This script extracts and installs adf files for BetterWB Package. 
 
 
 echo "Installing 'MISC31_#1.adf'..."
 unadf >NIL: PACKAGEDIR:MISC31_#1.adf DEST=PACKAGEDIR:
-copy PACKAGEDIR:Misc3.1/BetterWB.readme.txt INSTALLDIR:Locale/Help
-unzip >NIL: -o PACKAGEDIR:Misc3.1/BetterWB1.zip -d INSTALLDIR:
+copy PACKAGEDIR:Misc3.1/BetterWB.readme.txt SYSTEMDIR:Locale/Help
+unzip >NIL: -o PACKAGEDIR:Misc3.1/BetterWB1.zip -d SYSTEMDIR:
 
 
 echo "Installing 'TOOLS31_#2.adf'..."
 unadf >NIL: PACKAGEDIR:TOOLS31_#2.adf DEST=PACKAGEDIR:
-unzip >NIL: -o PACKAGEDIR:Tools3.1/BetterWB2.zip -d INSTALLDIR:
+unzip >NIL: -o PACKAGEDIR:Tools3.1/BetterWB2.zip -d SYSTEMDIR:
 
 
 echo "Installing 'BONUS31_#3.adf'..."
 unadf >NIL: PACKAGEDIR:BONUS31_#3.adf DEST=PACKAGEDIR:
-unzip >NIL: -o PACKAGEDIR:Bonus3.1/BetterWB3.zip -d INSTALLDIR:
+unzip >NIL: -o PACKAGEDIR:Bonus3.1/BetterWB3.zip -d SYSTEMDIR:
 
 
 echo "Installing 'DOCS31_#4.adf'..."
 unadf >NIL: PACKAGEDIR:DOCS31_#4.adf DEST=PACKAGEDIR:
-unzip >NIL: -o PACKAGEDIR:Docs3.1/BetterWB4.zip -d INSTALLDIR:
+unzip >NIL: -o PACKAGEDIR:Docs3.1/BetterWB4.zip -d SYSTEMDIR:
 
 
 echo "Installing 'ICONS31_#5.adf'..."
 unadf >NIL: PACKAGEDIR:ICONS31_#5.adf DEST=PACKAGEDIR:
-unzip >NIL: -o PACKAGEDIR:Icons3.1/BetterWB5.zip -d INSTALLDIR:
+unzip >NIL: -o PACKAGEDIR:Icons3.1/BetterWB5.zip -d SYSTEMDIR:
 
 
 echo "Installing 'DRIVERS31_#6.adf'..."
 unadf >NIL: PACKAGEDIR:DRIVERS31_#6.adf DEST=PACKAGEDIR:
-unzip >NIL: -o PACKAGEDIR:Drivers3.1/BetterWB6.zip -d INSTALLDIR:
+unzip >NIL: -o PACKAGEDIR:Drivers3.1/BetterWB6.zip -d SYSTEMDIR:
 
 
 ; Delete obsolete files
-delete >NIL: INSTALLDIR:S/BRUtab force all
-delete >NIL: INSTALLDIR:S/HDBackup.config force all
-delete >NIL: INSTALLDIR:Tools/calculator force all
-delete >NIL: INSTALLDIR:Tools/calculator.info force all
-delete >NIL: INSTALLDIR:Tools/BRU force all
-delete >NIL: INSTALLDIR:Tools/HDBackup.help force all
-delete >NIL: INSTALLDIR:Tools/HDBackup.info force all
-delete >NIL: INSTALLDIR:Tools/HDBackup force all
-delete >NIL: INSTALLDIR:Tools/Showconfig.info force all
-delete >NIL: INSTALLDIR:Tools/Showconfig force all
-delete >NIL: INSTALLDIR:System/NoFastMem force all
-delete >NIL: INSTALLDIR:System/NoFastMem.info force all
-delete >NIL: INSTALLDIR:Tools/Commodities/Clicktofront force all
-delete >NIL: INSTALLDIR:Tools/Commodities/Clicktofront.info force all
-delete >NIL: INSTALLDIR:Tools/PrepCard.info force all
+delete >NIL: SYSTEMDIR:S/BRUtab force all
+delete >NIL: SYSTEMDIR:S/HDBackup.config force all
+delete >NIL: SYSTEMDIR:Tools/calculator force all
+delete >NIL: SYSTEMDIR:Tools/calculator.info force all
+delete >NIL: SYSTEMDIR:Tools/BRU force all
+delete >NIL: SYSTEMDIR:Tools/HDBackup.help force all
+delete >NIL: SYSTEMDIR:Tools/HDBackup.info force all
+delete >NIL: SYSTEMDIR:Tools/HDBackup force all
+delete >NIL: SYSTEMDIR:Tools/Showconfig.info force all
+delete >NIL: SYSTEMDIR:Tools/Showconfig force all
+delete >NIL: SYSTEMDIR:System/NoFastMem force all
+delete >NIL: SYSTEMDIR:System/NoFastMem.info force all
+delete >NIL: SYSTEMDIR:Tools/Commodities/Clicktofront force all
+delete >NIL: SYSTEMDIR:Tools/Commodities/Clicktofront.info force all
+delete >NIL: SYSTEMDIR:Tools/PrepCard.info force all
 
 
 ; Fix read write execute flags
-protect >NIL: INSTALLDIR:#? +rwe ALL
+protect >NIL: SYSTEMDIR:#? +rwe ALL
 
 
 ; Fix CBM Pure bit bug
-Protect INSTALLDIR:C/AddBuffers +p
-Protect INSTALLDIR:C/AddDataTypes +p
-Protect INSTALLDIR:C/Assign +p
-Protect INSTALLDIR:C/Avail +p
-Protect INSTALLDIR:C/Break +p
-Protect INSTALLDIR:C/ChangeTaskPri +p
-Protect INSTALLDIR:C/ConClip +p
-Protect INSTALLDIR:C/Copy +p
-Protect INSTALLDIR:C/CPU +p
-Protect INSTALLDIR:C/Date +p
-Protect INSTALLDIR:C/Delete +p
-Protect INSTALLDIR:C/Dir +p
-Protect INSTALLDIR:C/DiskChange +p
-Protect INSTALLDIR:C/Ed +p
-Protect INSTALLDIR:C/Edit +p
-Protect INSTALLDIR:C/Eval +p
-Protect INSTALLDIR:C/Execute +p
-Protect INSTALLDIR:C/Filenote +p
-Protect INSTALLDIR:C/IconX +p
-Protect INSTALLDIR:C/Info +p
-Protect INSTALLDIR:C/Install +p
-Protect INSTALLDIR:C/Join +p
-Protect INSTALLDIR:C/List +p
-Protect INSTALLDIR:C/Lock +p
-Protect INSTALLDIR:C/MagTape +p
-Protect INSTALLDIR:C/MakeDir +p
-Protect INSTALLDIR:C/MakeLink +p
-Protect INSTALLDIR:C/Mount +p
-Protect INSTALLDIR:C/Protect +p
-Protect INSTALLDIR:C/Relabel +p
-Protect INSTALLDIR:C/RemRAD +p
-Protect INSTALLDIR:C/Rename +p
-Protect INSTALLDIR:C/RequestChoice +p
-Protect INSTALLDIR:C/RequestFile +p
-Protect INSTALLDIR:C/Search +p
-Protect INSTALLDIR:C/SetClock +p
-Protect INSTALLDIR:C/SetDate +p
-Protect INSTALLDIR:C/SetFont +p
-Protect INSTALLDIR:C/SetKeyboard +p
-Protect INSTALLDIR:C/Sort +p
-Protect INSTALLDIR:C/Status +p
-Protect INSTALLDIR:C/Type +p
-Protect INSTALLDIR:C/Version +p
+Protect SYSTEMDIR:C/AddBuffers +p
+Protect SYSTEMDIR:C/AddDataTypes +p
+Protect SYSTEMDIR:C/Assign +p
+Protect SYSTEMDIR:C/Avail +p
+Protect SYSTEMDIR:C/Break +p
+Protect SYSTEMDIR:C/ChangeTaskPri +p
+Protect SYSTEMDIR:C/ConClip +p
+Protect SYSTEMDIR:C/Copy +p
+Protect SYSTEMDIR:C/CPU +p
+Protect SYSTEMDIR:C/Date +p
+Protect SYSTEMDIR:C/Delete +p
+Protect SYSTEMDIR:C/Dir +p
+Protect SYSTEMDIR:C/DiskChange +p
+Protect SYSTEMDIR:C/Ed +p
+Protect SYSTEMDIR:C/Edit +p
+Protect SYSTEMDIR:C/Eval +p
+Protect SYSTEMDIR:C/Execute +p
+Protect SYSTEMDIR:C/Filenote +p
+Protect SYSTEMDIR:C/IconX +p
+Protect SYSTEMDIR:C/Info +p
+Protect SYSTEMDIR:C/Install +p
+Protect SYSTEMDIR:C/Join +p
+Protect SYSTEMDIR:C/List +p
+Protect SYSTEMDIR:C/Lock +p
+Protect SYSTEMDIR:C/MagTape +p
+Protect SYSTEMDIR:C/MakeDir +p
+Protect SYSTEMDIR:C/MakeLink +p
+Protect SYSTEMDIR:C/Mount +p
+Protect SYSTEMDIR:C/Protect +p
+Protect SYSTEMDIR:C/Relabel +p
+Protect SYSTEMDIR:C/RemRAD +p
+Protect SYSTEMDIR:C/Rename +p
+Protect SYSTEMDIR:C/RequestChoice +p
+Protect SYSTEMDIR:C/RequestFile +p
+Protect SYSTEMDIR:C/Search +p
+Protect SYSTEMDIR:C/SetClock +p
+Protect SYSTEMDIR:C/SetDate +p
+Protect SYSTEMDIR:C/SetFont +p
+Protect SYSTEMDIR:C/SetKeyboard +p
+Protect SYSTEMDIR:C/Sort +p
+Protect SYSTEMDIR:C/Status +p
+Protect SYSTEMDIR:C/Type +p
+Protect SYSTEMDIR:C/Version +p
 
 
 ; Add the S bit to some scripts
-Protect INSTALLDIR:System/Rebooter +s
-Protect INSTALLDIR:System/HardWiz +s
-Protect INSTALLDIR:Tools/PrepCard+ +s
+Protect SYSTEMDIR:System/Rebooter +s
+Protect SYSTEMDIR:System/HardWiz +s
+Protect SYSTEMDIR:Tools/PrepCard+ +s
