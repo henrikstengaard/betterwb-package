@@ -2,7 +2,7 @@ Add-Type -Assembly System.IO.Compression.FileSystem
 
 $packageDir = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("..\package")
 $packageName = "BetterWB"
-$packageVersion = "4.0.0"
+$packageVersion = "4.0.1"
 $packageFile = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath(("..\{0}.{1}.zip" -f $packageName, $packageVersion))
 
 if (test-path -path $packageFile)

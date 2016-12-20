@@ -2,40 +2,40 @@
 ; -------------------------------
 ;
 ; Author: Henrik Noerfjand Stengaard
-; Date: 2016-11-14
+; Date: 2016-12-20
 ;
 ; This script extracts and installs adf files for BetterWB Package. 
 
 
 echo "Installing 'MISC31_#1.adf'..."
-unadf >NIL: PACKAGEDIR:MISC31_#1.adf DEST=PACKAGEDIR:
-copy PACKAGEDIR:Misc3.1/BetterWB.readme.txt SYSTEMDIR:Locale/Help
-unzip >NIL: -o PACKAGEDIR:Misc3.1/BetterWB1.zip -d SYSTEMDIR:
+diskwiz >NIL: PACKAGEDIR:MISC31_#1.adf ff0:
+copy ff0:BetterWB.readme.txt SYSTEMDIR:Locale/Help
+unzip >NIL: -o ff0:BetterWB1.zip -d SYSTEMDIR:
 
 
 echo "Installing 'TOOLS31_#2.adf'..."
-unadf >NIL: PACKAGEDIR:TOOLS31_#2.adf DEST=PACKAGEDIR:
-unzip >NIL: -o PACKAGEDIR:Tools3.1/BetterWB2.zip -d SYSTEMDIR:
+diskwiz >NIL: PACKAGEDIR:TOOLS31_#2.adf ff0:
+unzip >NIL: -o ff0:BetterWB2.zip -d SYSTEMDIR:
 
 
 echo "Installing 'BONUS31_#3.adf'..."
-unadf >NIL: PACKAGEDIR:BONUS31_#3.adf DEST=PACKAGEDIR:
-unzip >NIL: -o PACKAGEDIR:Bonus3.1/BetterWB3.zip -d SYSTEMDIR:
+diskwiz >NIL: PACKAGEDIR:BONUS31_#3.adf ff0:
+unzip >NIL: -o ff0:BetterWB3.zip -d SYSTEMDIR:
 
 
 echo "Installing 'DOCS31_#4.adf'..."
-unadf >NIL: PACKAGEDIR:DOCS31_#4.adf DEST=PACKAGEDIR:
-unzip >NIL: -o PACKAGEDIR:Docs3.1/BetterWB4.zip -d SYSTEMDIR:
+diskwiz >NIL: PACKAGEDIR:DOCS31_#4.adf ff0:
+unzip >NIL: -o ff0:BetterWB4.zip -d SYSTEMDIR:
 
 
 echo "Installing 'ICONS31_#5.adf'..."
-unadf >NIL: PACKAGEDIR:ICONS31_#5.adf DEST=PACKAGEDIR:
-unzip >NIL: -o PACKAGEDIR:Icons3.1/BetterWB5.zip -d SYSTEMDIR:
+diskwiz >NIL: PACKAGEDIR:ICONS31_#5.adf ff0:
+unzip >NIL: -o ff0:BetterWB5.zip -d SYSTEMDIR:
 
 
 echo "Installing 'DRIVERS31_#6.adf'..."
-unadf >NIL: PACKAGEDIR:DRIVERS31_#6.adf DEST=PACKAGEDIR:
-unzip >NIL: -o PACKAGEDIR:Drivers3.1/BetterWB6.zip -d SYSTEMDIR:
+diskwiz >NIL: PACKAGEDIR:DRIVERS31_#6.adf ff0:
+unzip >NIL: -o ff0:BetterWB6.zip -d SYSTEMDIR:
 
 
 ; Delete obsolete files
