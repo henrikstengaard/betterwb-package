@@ -1,0 +1,221 @@
+BetterWB release 4.0 (27th February 2015)
+                            
+
+Introduction:
+ 
+This package is for those outcasts that still keep their Amigas in
+their most basic configurations. It is also meant for those purists
+that think that anything beyond 3.1 (be it AmigaOS 3.5, or even 3.9 
+or 4.x) is a piece of crap and generates an overbloated system.
+This is indeed a better AmigaOS 3.1 than 3.1 itself ;) 
+ 
+"BetterWB" will provide you of a new and improved 3.1 experience, 
+whilst remaining faithfull to the essential Commodore Amiga concepts.
+It has no MUI and no ClassAct/ReAction dependencies which makes it 
+less resource hungry.
+
+
+Features:
+  
+-New and Improved datatypes for gif, jpg, bmp, png, pcx, ilbm, tga, 
+tiff,wav and cdxl media
+-Modern backup tool (ABackup) that replaces the ancient one 
+-New Removable media partition mounter (SCSIMounter) 
+-New System snooper (SnoopDOS) 
+-Fast and easy to use floppy disk copier application (SuperDuper) 
+-Say, the text to speech utility is back again 
+-New commodities: GrabIFF, WBGauge, SwazInfo, AssignWedge, CleverWIN,
+IconAppearer, AltTab, AddTools, ToolAlias,DontShowIborder, ModePro,
+MultiHelp, yStart, WindowToFront, DosPrefs, BenchTrash, PowerSnap, 
+CronTask, Ned, FreeWheel, PM and MagicMenu
+-66 additional workbench printer drivers (take a peek at your 
+SYS:Storage drawer)
+-Three new monitor drivers for improved video support (HD720, 
+HighGFX and SuperPlus)
+-A complete set of manuals that explain all these new features (They 
+are inside HELP: )
+-New more flexible handlers (GrabIFFHandler,port-handler,CB-handler 
+and speak-handler) 
+-A couple of upgraded, and new system commands (Info, Installer, 
+Reboot, SetPatch, Version, Avail, Sort, Copy, Join, Break, WBRun, 
+Add44k, DMS, Dir, Showboards, dd, Status, Addmem, dir, LockDevice,
+ and RequestChoice)
+-XPKMaster offers a data compression/decompression library available 
+to programs that support it
+-Reworked WBPattern preferences with more options 
+-New Find utility that lets you search for any given pattern 
+-ShowConfig has been replaced by the powerful WhichAmiga 
+-Charmap is a tool that helps dealing with all the characters of a 
+given font. Useful for accents and uncommon characters.
+-Prepcard+ helps the user to manage other hardware on the pcmcia port
+-Totalcalc is a replacement calculator that can even be configured as
+an advanced scientific one
+-MinStack increases the default stack size for programs to 8KB (Can 
+be configured to any size)
+-Enhanced Serial prefs program with much more options 
+-FastFileSystem 44.5 patches NSD64 devices to support drives bigger 
+than 4GB (upto 8GB)
+-PatchRam fixes a long standing bug in ram-hadler. The Ramdisk now 
+displays correct usage, and not 100% all the time
+-Smaller and faster picture.datatype that speeds up image display 
+operations 
+-Faster parallel and serial devices
+-A greatly enhanced Shell console with a ton of neat features (ZShell)
+-The famous LHA, LZX, GZIP and ZIP/UNZIP archiver commands are 
+installed in their latest incarnation
+-Queue-Handler, mathieeedoubbas.library, serial.device, and 
+rexxsyslib.library have been bugfixed
+-An incredibly faster mathtrans.library with an extra feature
+-Jaztools is a commandline tool to handle ZIP and JAZ drives
+-A low resource but flexible filemanager is now present (DirWork)
+-Support for FAT and FAT32 volumes is achieved with fat95
+-The fastest Amiga filesystem, PFS3, and its associated tools
+-Corrected the "Pure" bit omision in the original AmigaOS 3.1 
+distribution
+-Macintosh floppy format (HFS) and proper mountlist (MAC0) 
+implementation
+-Highly enahnced and optimised cdrom filesystem with many new 
+features such as: Long filename support, Macintosh HFS, multiple 
+session, hybrid (audio+data), and iso 9660 cdrom support
+-IPrefs features now an increased stack to avoid overflows when 
+loading workbench backdrop pictures
+-Mfm.device got a stack increase to prevent problems with some 
+programs
+-New and powerful workbench system format with 64 bit support
+-Compact Disk player with lots of great features (ACDPlay)
+-SetJoyPort is a program that improves the chances of using a CD32 
+style joypad with all games 
+-Midi support for many programs with camd.library and the Midiports 
+preferences application
+-New graphic interface that lets you read and write back adf and dms 
+floppy images.
+-There is a new preferences program "WBstartup" that lets you easily 
+handle the WBStartup and Commodities drawer.
+-TagLiFE is a simple patch for the utility.library that installs a
+new set of optimized assembler routines to get faster TagList support
+-PatchWB solves many workbench bugs
+-Now icons display faster and your system can display all kinds of 
+Amiga icons 
+-BootUte replaces the NoFastMem system utility
+-CopyIcon is a tool that allows you to easily copy and replace 
+Amiga icons
+-A cache font system is built-in and requires no extra memory
+-The superb Redit text editor is now included
+-IconSet is a new preferences program that lets you switch between 
+different icon types with ease
+-Easily customize and lock palettes with FullPalette
+-Rebooter is a new handy application for running demos, games and 
+apps with maximum memory at the user's disposal 
+-EnvHandler will save quite a lot of ram by optimising envarc
+-Full 68040, 68060 and ACA accelerators autodetection with driver 
+support thanks to the new HardWiz program
+-DiskSalv and PFSDoctor are integrated into DiskDoctor
+-Plus many more minor tweaks and other bugfixes
+-A scrollable Console buffer can be activated with the CB command
+-DOSDrivers for Jaz and Zip drives are included
+-Datatypes.library 45.4 corrects several bugs and is a little bit 
+faster than its previous counterpart
+
+ 
+Minimum requirements: 
+ 
+Kickstart rom 3.1 (version 40.xx)
+AmigaOS 3.1 already installed in your harddrive
+About 10MB of free hdd space
+ 
+Note: There have been some successful reports with 3.0
+
+Recommended system: 
+ 
+Kickstart rom 3.1 (version 40.xx) 
+AmigaOS 3.1 already installed in your harddrive
+1MB of chipram (the more memory, as always, the better) 
+About 10MB of free hdd space
+ 
+
+Frequently asked questions
+ 
+Q:Some Commodities dont work. What is going on? 
+A:512KB is the minimum amount of memory BetterWB requires,  
+so if you attempt to run many commodities at once, you can easily run 
+out of it.
+ 
+Q:Where is the eye candy I was expecting? 
+A:BetterWB was not designed for visual enjoyment, as many other packs.
+In fact, it looks similar to Workbench 3.1. Most of the changes it 
+has, have been done "under the hood" to bugfix, enhance and upgrade 
+AmigaOS 3.1, but remaining as conceptually loyal as possible to what 
+Commodore did back in the golden years. The advantages of this 
+approach are evident for those so called "purists" that dont want an 
+overbloated system, and for Amiga users that dont want to buy new 
+hardware just to have an improved/updated AmigaOS experience in their 
+old and beloved hardware. That said, you can improve the appeareance 
+of workbench by using IconSet, and switching icons to GlowIcons, and 
+following the tips it will provide. I also recommend you play a bit 
+enabling more commodities until you get the desired effect.
+ 
+Q:Will I be able to use harddrives bigger than 4GB?  
+A:Yes, you need to update your FastFileSystem in your harddrive´s RDB 
+using HDToolBox or similar application. Any devices that you mount 
+manually should automatically use the patched FFS, assuming this new 
+FFS has the same filename as the original used to have. Beware that 
+some old programs are not compilant with the New Style Device 
+standard (Quarterback, DiskSalv, ReOrg). Do not use them in the 4GB 
+side of your drive. Maximum supported size is now 8GB, so be careful.
+When formatting any drive, just take care of never creating partitions
+of more than 2GB in size. 
+An overall better solution is to use the excellent Professional File 
+System (PFS) which is also included in this pack, which can support 
+bigger drives without any problems (and it will also be faster and 
+less memory hungry).
+ 
+Q:Where can I find documentation for all this BetterWB thing? 
+A:All individual readme files and amigaguide documents are inside 
+SYS:Locale/Help/ drawer (Help: volume) and can be easily be viewed 
+with "Multiview".
+
+Q:After installing BetterWB, my Amiga doesnt properly boot. What`s 
+wrong?
+A: The installation script assumes you are installing BetterWB on a
+fresh AmigaOS 3.1 install. You should not tweak your workbench at all
+before installing BetterWB. But, dont be afraid to adjust and modify 
+your workbench to suit your tastes after installing BetterWB.
+
+Q:Why doesnt ACDPlay work?
+A:You need to adjust your cdrom tooltypes to match your drive 
+unit and device name.
+
+Q:Why does ModeProPrefs/MagicMenuPrefs/CronPrefs complain when I run 
+it?
+A:Because it requires that you move the corresponding commodity 
+to the WBStartup drawer. I recommend you use the WBstartup 
+preferences program to easily accomplish this task.
+
+Q:Why does BootUte issue a recoverable alert (yellow guru) when I 
+run it?
+This is because you are running it in a system that has only 512KB of
+chipmem. BootUte is envisioned in BetterWB to be an enhanced 
+replacement of the NoFastMem program. So it is of little or no use in 
+running it in a System with no fastmem. 
+
+Q:How do I get rid of those ugly icon borders? 
+Just use your WBStartup prefs utility and enable the DontShowIBorder 
+commodity. Reboot and you are done!
+
+Q:Why do GlowIcons, NewIcons, etc. look colorless on Workbench?
+You need to use your Screenmode prefs program and select more 
+colors than what you already have.
+
+
+Contact
+ 
+official website is
+http://lilliput.amiga-projects.net/betterwb.htm
+
+The author of this BetterWB pack is reachable at kurq@yahoo.com 
+ 
+Kudos go to those developers that created all these programs. 
+BetterWB only exists because of them!
+ 
+I wish to remain anonymous, this is just 
+a labour of love for the Amiga.
