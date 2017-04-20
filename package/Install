@@ -2,9 +2,22 @@
 ; -------------------------------
 ;
 ; Author: Henrik Noerfjand Stengaard
-; Date: 2017-04-14
+; Date: 2017-04-19
 ;
 ; This script extracts and installs zip files for BetterWB Package. 
+
+
+; Copy readme and screenshots to locale help for BetterWB
+IF NOT EXISTS SYSTEMDIR:Locale/Help/BetterWB
+  makepath >NIL: SYSTEMDIR:Locale/Help/BetterWB
+ENDIF
+copy >NIL: PACKAGEDIR:README SYSTEMDIR:Locale/Help/BetterWB
+copy >NIL: PACKAGEDIR:README.guide SYSTEMDIR:Locale/Help/BetterWB
+copy >NIL: PACKAGEDIR:README.info SYSTEMDIR:Locale/Help/BetterWB
+IF NOT EXISTS SYSTEMDIR:Locale/Help/BetterWB/screenshots
+  makepath >NIL: SYSTEMDIR:Locale/Help/BetterWB/screenshots
+ENDIF
+copy >NIL: PACKAGEDIR:screenshots/#?.iff SYSTEMDIR:Locale/Help/BetterWB/screenshots
 
 
 echo "Installing 'MISC31 #1'..."
