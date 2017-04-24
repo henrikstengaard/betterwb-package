@@ -25,6 +25,10 @@ copy >NIL: PACKAGEDIR:BetterWB.readme.txt#? SYSTEMDIR:Locale/Help
 unzip >NIL: -o PACKAGEDIR:BetterWB1.zip -d SYSTEMDIR:
 
 
+; Fix read write execute flags (for unzip being overwritten)
+protect >NIL: SYSTEMDIR:#? +rwe ALL
+
+
 echo "Installing 'TOOLS31 #2'..."
 unzip >NIL: -o PACKAGEDIR:BetterWB2.zip -d SYSTEMDIR:
 
