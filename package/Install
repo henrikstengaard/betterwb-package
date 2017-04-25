@@ -26,7 +26,7 @@ unzip >NIL: -o PACKAGEDIR:BetterWB1.zip -d SYSTEMDIR:
 
 
 ; Fix read write execute flags (for unzip being overwritten)
-protect >NIL: SYSTEMDIR:#? +rwe ALL
+protect >NIL: SYSTEMDIR:C/UnZip +rwe
 
 
 echo "Installing 'TOOLS31 #2'..."
