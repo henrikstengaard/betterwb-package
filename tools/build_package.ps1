@@ -2,7 +2,7 @@
 # -------------
 #
 # Author: Henrik Nørfjand Stengaard
-# Date:   2017-04-14
+# Date:   2017-05-13
 #
 # A PowerShell script to build package for HstWB Installer.
 
@@ -11,11 +11,13 @@ Add-Type -Assembly System.IO.Compression.FileSystem
 
 
 # paths
-$compressionLevel = [System.IO.Compression.CompressionLevel]::Optimal
 $rootDir = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("..")
 $packageDir = Join-Path -Path $rootDir -ChildPath "package"
 $screenshotsDir = Join-Path -Path $rootDir -ChildPath "screenshots"
 $readmeMarkdownFile = Join-Path -Path $rootDir -ChildPath "README.md"
+$createZipFromDirectoryFile = Resolve-Path "create_zip_from_directory.ps1"
+$convertZipToAmigaFile = Resolve-Path "convert_zip_to_amiga.ps1"
+
 
 # get screenshot files
 $screenshotFiles = @()
@@ -54,33 +56,6 @@ Write-Host "Building readme guide for package from readme markdown..." -Foregrou
 Write-Host "Done." -ForegroundColor "Yellow"
 
 
-# c# code for forward slash encoder used to create zip files with forward slash as path separator in entries compatible with amiga
-$source = @"
-using System.Text;
-
-namespace HstWB.Package
-{ 
-	public class ForwardSlashEncoder : UTF8Encoding
-	{
-		public ForwardSlashEncoder() : base(true)
-		{
-		}
-
-		public override byte[] GetBytes(string s)
-		{
-			s = s.Replace("\\", "/");
-			return base.GetBytes(s);
-		}
-	}
-}
-"@
-Add-Type -TypeDefinition $source -Language CSharp 
-
-
-# create instance of forward slash encoder
-$forwardSlashEncoder = New-Object 'HstWB.Package.ForwardSlashEncoder'
-
-
 # read package ini lines
 $packageIniFile = [System.IO.Path]::Combine($packageDir, 'package.ini')
 $packageIniLines = Get-Content $packageIniFile
@@ -102,8 +77,14 @@ foreach ($contentDir in $contentDirs)
 	# write progress message
 	Write-Host ("Compressing content '" + $contentDir.Name + "' zip file...")
 
+	# temp file file
+	$tempZipFile = Join-Path $packageDir -ChildPath "temp.zip"
+
+	# compress content directory
+	& $createZipFromDirectoryFile -inputDir $contentDir.FullName -outputZipFile $tempZipFile
+
 	# content zip file
-	$contentZipFile = [System.IO.Path]::Combine($packageDir, ($contentDir.Name + ".zip"))
+	$contentZipFile = Join-Path $packageDir -ChildPath ($contentDir.Name + ".zip")
 
 	# delete content zip file, if it exists
 	if (test-path -path $contentZipFile)
@@ -111,8 +92,14 @@ foreach ($contentDir in $contentDirs)
 		remove-item $contentZipFile -force
 	}
 
-	# compress content directory
-	[System.IO.Compression.ZipFile]::CreateFromDirectory($contentDir.FullName, $contentZipFile, $compressionLevel, $false, $forwardSlashEncoder)	
+	# convert zip to amiga
+	& $convertZipToAmigaFile -zipFile $tempZipFile -outputZipFile $contentZipFile
+
+	# delete temp zip file, if it exists
+	if (test-path -path $tempZipFile)
+	{
+		remove-item $tempZipFile -force
+	}
 }
 
 
@@ -129,7 +116,7 @@ if (test-path -path $packageFile)
 }
 
 # compress package directory
-[System.IO.Compression.ZipFile]::CreateFromDirectory($packageDir, $packageFile, $compressionLevel, $false, $forwardSlashEncoder)
+[System.IO.Compression.ZipFile]::CreateFromDirectory($packageDir, $packageFile, 'Optimal', $false)
 
 
 # write progress message
