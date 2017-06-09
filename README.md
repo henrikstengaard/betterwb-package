@@ -32,7 +32,7 @@ Original version of BetterWB can be downloaded from http://lilliput.amiga-projec
 
 ## Requirements
 
-BetterWB package requires Workbench 3.1 is installed on any Amiga with about 10MB free space on a harddrive.
+BetterWB package can be installed on any Amiga with Workbench 3.1 (or better) and about 10MB free space on a harddrive.
 
 ## Installation
 
