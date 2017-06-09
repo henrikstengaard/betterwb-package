@@ -30,12 +30,9 @@ Original version of BetterWB can be downloaded from http://lilliput.amiga-projec
 - Limited eye candy (but it does not compromise performance).
 - Will appear incomplete, for high end or heavily expanded Amiga systems (They are probably better with other workbench packs), that rely on visual appealing components.
 
-**Requirements:**
+## Requirements
 
-- Any Amiga computer.
-- Kickstart rom 3.1 (May also work under 3.0).
-- AmigaOS 3.1 disk set (May also work under 3.0).
-- About 10MB of storage space on a harddrive.
+BetterWB package requires Workbench 3.1 is installed on any Amiga with about 10MB free space on a harddrive.
 
 ## Installation
 
