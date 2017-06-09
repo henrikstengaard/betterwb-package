@@ -2,7 +2,7 @@
 ; -------------------------------
 ;
 ; Author: Henrik Noerfjand Stengaard
-; Date: 2017-04-25
+; Date: 2017-06-09
 ;
 ; This script extracts and installs zip files for BetterWB Package. 
 
@@ -10,7 +10,26 @@
 ; Copy readme and screenshots to locale help for BetterWB
 IF NOT EXISTS SYSTEMDIR:Locale/Help/BetterWB
   makepath >NIL: SYSTEMDIR:Locale/Help/BetterWB
+  IF EXISTS SYSTEMDIR:Prefs/Env-Archive/Sys/def_drawer.info
+    makeicon >NIL: SYSTEMDIR:Locale/Help/BetterWB FROM SYSTEMDIR:Prefs/Env-Archive/Sys/def_drawer.info 
+  ELSE
+    makeicon >NIL: SYSTEMDIR:Locale/Help/BetterWB
+  ENDIF
 ENDIF
+IF NOT EXISTS SYSTEMDIR:Locale/Help.info
+  IF EXISTS SYSTEMDIR:Prefs/Env-Archive/Sys/def_drawer.info
+    makeicon >NIL: SYSTEMDIR:Locale/Help FROM SYSTEMDIR:Prefs/Env-Archive/Sys/def_drawer.info 
+  ELSE
+    makeicon >NIL: SYSTEMDIR:Locale/Help
+  ENDIF
+ENDIF
+IF NOT EXISTS SYSTEMDIR:Locale.info
+  IF EXISTS SYSTEMDIR:Prefs/Env-Archive/Sys/def_drawer.info
+    makeicon >NIL: SYSTEMDIR:Locale FROM SYSTEMDIR:Prefs/Env-Archive/Sys/def_drawer.info 
+  ELSE
+    makeicon >NIL: SYSTEMDIR:Locale
+  ENDIF
+ENDIF 
 copy >NIL: PACKAGEDIR:README SYSTEMDIR:Locale/Help/BetterWB
 copy >NIL: PACKAGEDIR:README.guide SYSTEMDIR:Locale/Help/BetterWB
 copy >NIL: PACKAGEDIR:README.info SYSTEMDIR:Locale/Help/BetterWB
