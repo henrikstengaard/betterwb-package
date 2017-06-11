@@ -4,11 +4,15 @@ BetterWB is an enhancement built for Workbench 3.1 by Gulliver for low end Amiga
 
 ## Description
 
-BetterWB is a new workbench pack, much like AIAB, Amikit, AmigaSYS, ClassicWB, etc. but applying a totally different aproach. It aims to be much like an enhancement, an updated extension to AmigaOS 3.1, without all those hardware requirement penalties typically associated with these kind of packs. It is indeed a better 3.1 than 3.1 itself!
+BetterWB Package contains BetterWB v4.0 created by Gulliver from EAB.
 
-BetterWB has been converted to a package for HstWB Installer.
+With permission from Gulliver it has been converted to a package for HstWB Installer.
 
 Original version of BetterWB can be downloaded from http://lilliput.amiga-projects.net/BetterWB.htm.
+
+---
+
+BetterWB is a new workbench pack, much like AIAB, Amikit, AmigaSYS, ClassicWB, etc. but applying a totally different aproach. It aims to be much like an enhancement, an updated extension to AmigaOS 3.1, without all those hardware requirement penalties typically associated with these kind of packs. It is indeed a better 3.1 than 3.1 itself!
 
 **BetterWB best targets:**
 
