@@ -2,7 +2,7 @@
 # -------------
 #
 # Author: Henrik Nørfjand Stengaard
-# Date:   2017-05-13
+# Date:   2018-02-24
 #
 # A PowerShell script to build package for HstWB Installer.
 
@@ -24,7 +24,7 @@ $screenshotFiles = @()
 
 if (Test-Path $screenshotsDir)
 {
-	$screenshotFiles += Get-ChildItem -Path $screenshotsDir -Filter *.png
+	$screenshotFiles += Get-ChildItem -Path "$screenshotsDir\*" -Include *.png, *.jpg
 }
 
 
@@ -56,18 +56,13 @@ Write-Host "Building readme guide for package from readme markdown..." -Foregrou
 Write-Host "Done." -ForegroundColor "Yellow"
 
 
-# read package ini lines
-$packageIniFile = [System.IO.Path]::Combine($packageDir, 'package.ini')
-$packageIniLines = Get-Content $packageIniFile
-
-
-# get package name and version from package ini lines
-$packageName = ($packageIniLines | Where-Object { $_ -match '^Name' } | Select-Object -First 1) -replace '^Name=', ''
-$packageVersion = ($packageIniLines | Where-Object { $_ -match '^Version' } | Select-Object -First 1) -replace '^Version=', ''
+# read package json file
+$hstwbPackageJsonFile = [System.IO.Path]::Combine($packageDir, 'hstwb-package.json')
+$hstwbPackage = Get-Content $hstwbPackageJsonFile -Raw | ConvertFrom-Json
 
 
 # write progress message
-Write-Host "Build package '$packageName' v$packageVersion" -ForegroundColor "Yellow"
+Write-Host ("Build package '{0}' v{1}" -f $hstwbPackage.Name, $hstwbPackage.Version) -ForegroundColor "Yellow"
 
 
 # compress content directories to zip files
@@ -107,7 +102,7 @@ foreach ($contentDir in $contentDirs)
 Write-Host "Compressing package zip file..." -ForegroundColor "Yellow"
 
 # package file
-$packageFile = Join-Path -Path $rootDir -ChildPath ("{0}.{1}.zip" -f ($packageName -replace '\s', '.'), $packageVersion)
+$packageFile = Join-Path -Path $rootDir -ChildPath ("{0}.{1}.zip" -f ($hstwbPackage.Name -replace '\s', '.'), $hstwbPackage.Version)
 
 # delete package file, if it exists
 if (test-path -path $packageFile)

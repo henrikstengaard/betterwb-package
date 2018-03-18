@@ -2,7 +2,7 @@
 # --------------------
 #
 # Author: Henrik Nørfjand Stengaard
-# Date:   2017-05-15
+# Date:   2018-02-20
 #
 # A PowerShell script to convert a zip file to Amiga.
 #
@@ -19,6 +19,9 @@
 #
 # Use either 7-Zip, WinRar, Windows build-in zip compression or create_zip_from_directory.ps1
 # script to create a compatible zip file.
+#
+# http://www.java2s.com/Code/CSharp/File-Stream/Thisclassreadsandwriteszipfiles.htm
+# https://users.cs.jmu.edu/buchhofp/forensics/formats/pkzip.html
 
 
 Param(
