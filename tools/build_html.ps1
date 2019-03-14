@@ -2,7 +2,7 @@
 # ----------
 #
 # Author: Henrik Nørfjand Stengaard
-# Date:   2017-04-03
+# Date:   2019-01-10
 #
 # A PowerShell script to build html from markdown and embeds github styling.
 #
@@ -10,7 +10,7 @@
 #
 # PanDoc:
 # https://github.com/jgm/pandoc/releases
-# https://github.com/jgm/pandoc/releases/download/1.19.2.1/pandoc-1.19.2.1-windows.msi
+# https://github.com/jgm/pandoc/releases/download/2.5/pandoc-2.5-windows-x86_64.msi
 # 
 # Note: Pandoc is installed in local appdata and might be caught to AntiVirus as malware
 
@@ -18,9 +18,10 @@ Param(
 	[Parameter(Mandatory=$true)]
 	[string]$markdownFile,
 	[Parameter(Mandatory=$true)]
-	[string]$htmlFile
+	[string]$htmlFile,
+	[Parameter(Mandatory=$true)]
+	[string]$title
 )
-
 
 # paths
 $pandocFile = Join-Path $env:LOCALAPPDATA -ChildPath 'Pandoc\pandoc.exe'
@@ -32,9 +33,8 @@ if (!(Test-Path -path $pandocFile))
 	exit 1
 }
 
-
 # pandoc
-$pandocArgs = "-f markdown_github -c ""github-pandoc.css"" -t html5 ""$markdownFile"" -o ""$htmlFile"""
+$pandocArgs = "-s --metadata pagetitle=""$title"" -f gfm --css=""github-pandoc.css"" -t html5 ""$markdownFile"" -o ""$htmlFile"""
 $pandocProcess = Start-Process -FilePath $pandocFile -ArgumentList $pandocArgs -Wait -NoNewWindow -PassThru
 
 # exit, if pandoc fails
@@ -50,5 +50,5 @@ $githubPandocCss = [System.IO.File]::ReadAllText($githubPandocFile)
 $html = [System.IO.File]::ReadAllText($htmlFile)
 
 # embed github pandoc css and remove stylesheet link
-$html = $html -replace '<style[^<>]+>(.*?)</style>', "<style type=""text/css"">`$1`r`n$githubPandocCss</style>" -replace '<link\s+rel="stylesheet"\s+href="github-pandoc.css">', ''
+$html = $html -replace '</head>', "<style type=""text/css"">$githubPandocCss</style>`r`n</head>" -replace '<link\s+rel="stylesheet"\s+href="github-pandoc.css"\s*/>', ''
 [System.IO.File]::WriteAllText($htmlFile, $html)

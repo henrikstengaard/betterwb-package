@@ -2,13 +2,12 @@
 # -------------
 #
 # Author: Henrik Nørfjand Stengaard
-# Date:   2018-02-24
+# Date:   2019-10-01
 #
 # A PowerShell script to build package for HstWB Installer.
 
 
 Add-Type -Assembly System.IO.Compression.FileSystem
-
 
 # paths
 $rootDir = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("..")
@@ -18,7 +17,6 @@ $readmeMarkdownFile = Join-Path -Path $rootDir -ChildPath "README.md"
 $createZipFromDirectoryFile = Resolve-Path "create_zip_from_directory.ps1"
 $convertZipToAmigaFile = Resolve-Path "convert_zip_to_amiga.ps1"
 
-
 # get screenshot files
 $screenshotFiles = @()
 
@@ -26,7 +24,6 @@ if (Test-Path $screenshotsDir)
 {
 	$screenshotFiles += Get-ChildItem -Path "$screenshotsDir\*" -Include *.png, *.jpg
 }
-
 
 # copy screenshot files, if any exist
 if ($screenshotFiles.Count -gt 0)
@@ -43,27 +40,25 @@ if ($screenshotFiles.Count -gt 0)
 	Write-Host "Done." -ForegroundColor "Yellow"
 }
 
-
-# Build html
-Write-Host "Building readme html for package from readme markdown..." -ForegroundColor "Yellow"
-& ".\build_html.ps1" -markdownFile $readmeMarkdownFile -htmlFile (Join-Path -Path $packageDir -ChildPath "README.html")
-Write-Host "Done." -ForegroundColor "Yellow"
-
-
-# Build guide
-Write-Host "Building readme guide for package from readme markdown..." -ForegroundColor "Yellow"
-& ".\build_guide.ps1" -markdownFile $readmeMarkdownFile -guideFile (Join-Path -Path $packageDir -ChildPath "README.guide")
-Write-Host "Done." -ForegroundColor "Yellow"
-
-
 # read package json file
 $hstwbPackageJsonFile = [System.IO.Path]::Combine($packageDir, 'hstwb-package.json')
 $hstwbPackage = Get-Content $hstwbPackageJsonFile -Raw | ConvertFrom-Json
 
+# package name
+$packageName = "{0} v{1}" -f $hstwbPackage.Name, $hstwbPackage.Version
+
+# build html
+Write-Host "Building readme html for package from readme markdown..." -ForegroundColor "Yellow"
+& ".\build_html.ps1" -markdownFile $readmeMarkdownFile -htmlFile (Join-Path -Path $packageDir -ChildPath "README.html") -title $packageName
+Write-Host "Done." -ForegroundColor "Yellow"
+
+# build guide
+Write-Host "Building readme guide for package from readme markdown..." -ForegroundColor "Yellow"
+& ".\build_guide.ps1" -markdownFile $readmeMarkdownFile -guideFile (Join-Path -Path $packageDir -ChildPath "README.guide")
+Write-Host "Done." -ForegroundColor "Yellow"
 
 # write progress message
 Write-Host ("Build package '{0}' v{1}" -f $hstwbPackage.Name, $hstwbPackage.Version) -ForegroundColor "Yellow"
-
 
 # compress content directories to zip files
 $contentDirs = Get-ChildItem -Path $rootDir | Where-Object { $_.PSIsContainer -and $_.Name -notmatch '(package|screenshots|tools|licenses)' }
@@ -97,7 +92,6 @@ foreach ($contentDir in $contentDirs)
 	}
 }
 
-
 # write progress message
 Write-Host "Compressing package zip file..." -ForegroundColor "Yellow"
 
@@ -112,7 +106,6 @@ if (test-path -path $packageFile)
 
 # compress package directory
 [System.IO.Compression.ZipFile]::CreateFromDirectory($packageDir, $packageFile, 'Optimal', $false)
-
 
 # write progress message
 Write-Host "Done." -ForegroundColor "Yellow"
