@@ -2,9 +2,14 @@
 ; -------------------------------
 ;
 ; Author: Henrik Noerfjand Stengaard
-; Date: 2017-06-09
+; Date: 2019-08-05
 ;
 ; This script extracts and installs zip files for BetterWB Package. 
+;
+; - Added support for Amiga OS 3.1.4:
+;   - Added LoadModule ROMUPDATE to support Kickstart 3.1 being patched to 3.1.4.
+;   - Added version checking of DEVS:scsi.device, so it only will be loaded if scsi.device in memory/resident is less than v43.45.
+;   - Added install patch Amiga OS 3.1.4.1, if Amiga OS 3.1.4.1 update is installed.
 
 
 ; Copy readme and screenshots to locale help for BetterWB
@@ -39,104 +44,139 @@ ENDIF
 copy >NIL: PACKAGEDIR:screenshots/#?.iff SYSTEMDIR:Locale/Help/BetterWB/screenshots
 
 
-echo "Installing 'MISC31 #1'..."
-copy >NIL: PACKAGEDIR:BetterWB.readme.txt#? SYSTEMDIR:Locale/Help
-unzip >NIL: -o PACKAGEDIR:BetterWB1.zip -d SYSTEMDIR:
+; detect amiga os version
+set amigaosversion ""
+IF EXISTS "SYSTEMDIR:Libs/workbench.library"
+  ; set amiga os version to 3.1.4, if workbench.library file is equal or greater than v45.194
+  Version >NIL: "SYSTEMDIR:Libs/workbench.library" 45 194 FILE
+  IF $RC EQ 0 VAL
+    set amigaosversion "3.1.4"
+  ENDIF
+ELSE
+  ; set amiga os version to 3.1.4, if loaded workbench.library is equal or greater than v45.194
+  Version >NIL: "workbench.library" 45 194
+  IF $RC EQ 0 VAL
+    set amigaosversion "3.1.4"
+  ENDIF
+ENDIF
 
+; extract betterwb to systemdir 
+
+copy >NIL: PACKAGEDIR:BetterWB.readme.txt#? SYSTEMDIR:Locale/Help
+
+IF "$amigaosversion" EQ "3.1.4"
+  ; extract excluding files conflicting with amiga os 3.1.4 
+
+  echo "Installing 'MISC31 #1'..."
+  unzip -qq -o -x PACKAGEDIR:BetterWB1.zip -d SYSTEMDIR: -x *Avail *Copy *Dir *makelink *SetPatch *Version *FastFileSystem
+
+  ; copy startup-sequence for amiga os 3.1.4
+  Copy >NIL: PACKAGEDIR:Startup-Sequence.3.1.4 SYSTEMDIR:S/Startup-Sequence
+
+  ; install patch amiga os 3.1.4.1, if it exists
+  IF EXISTS "SYSTEMDIR:S/Install-Patch-Amiga-OS-3141"
+    Execute "SYSTEMDIR:S/Install-Patch-Amiga-OS-3141" SYS SYSTEMDIR QUIET
+  ENDIF
+
+  echo "Installing 'TOOLS31 #2'..."
+  unzip -qq -o -x PACKAGEDIR:BetterWB2.zip -d SYSTEMDIR: -x *Installer
+
+  echo "Installing 'BONUS31 #3'..."
+  unzip -qq -o -x PACKAGEDIR:BetterWB3.zip -d SYSTEMDIR: -x *icon.library *version.library
+ELSE
+  echo "Installing 'MISC31 #1'..."
+  unzip -qq -o -x PACKAGEDIR:BetterWB1.zip -d SYSTEMDIR:
+
+  echo "Installing 'TOOLS31 #2'..."
+  unzip -qq -o -x PACKAGEDIR:BetterWB2.zip -d SYSTEMDIR:
+
+  echo "Installing 'BONUS31 #3'..."
+  unzip -qq -o -x PACKAGEDIR:BetterWB3.zip -d SYSTEMDIR:
+ENDIF
 
 ; Fix read write execute flags (for unzip being overwritten)
 protect >NIL: SYSTEMDIR:C/UnZip +rwe
 
-
-echo "Installing 'TOOLS31 #2'..."
-unzip >NIL: -o PACKAGEDIR:BetterWB2.zip -d SYSTEMDIR:
-
-
-echo "Installing 'BONUS31 #3'..."
-unzip >NIL: -o PACKAGEDIR:BetterWB3.zip -d SYSTEMDIR:
-
-
 echo "Installing 'DOCS31 #4'..."
-unzip >NIL: -o PACKAGEDIR:BetterWB4.zip -d SYSTEMDIR:
-
+unzip -qq -o -x PACKAGEDIR:BetterWB4.zip -d SYSTEMDIR:
 
 echo "Installing 'ICONS31 #5'..."
-unzip >NIL: -o PACKAGEDIR:BetterWB5.zip -d SYSTEMDIR:
-
+unzip -qq -o -x PACKAGEDIR:BetterWB5.zip -d SYSTEMDIR:
 
 echo "Installing 'DRIVERS31 #6'..."
-unzip >NIL: -o PACKAGEDIR:BetterWB6.zip -d SYSTEMDIR:
+unzip -qq -o -x PACKAGEDIR:BetterWB6.zip -d SYSTEMDIR:
 
 
-; Delete obsolete files
-delete >NIL: SYSTEMDIR:S/BRUtab force all
-delete >NIL: SYSTEMDIR:S/HDBackup.config force all
-delete >NIL: SYSTEMDIR:Tools/calculator force all
-delete >NIL: SYSTEMDIR:Tools/calculator.info force all
-delete >NIL: SYSTEMDIR:Tools/BRU force all
-delete >NIL: SYSTEMDIR:Tools/HDBackup.help force all
-delete >NIL: SYSTEMDIR:Tools/HDBackup.info force all
-delete >NIL: SYSTEMDIR:Tools/HDBackup force all
-delete >NIL: SYSTEMDIR:Tools/Showconfig.info force all
-delete >NIL: SYSTEMDIR:Tools/Showconfig force all
-delete >NIL: SYSTEMDIR:System/NoFastMem force all
-delete >NIL: SYSTEMDIR:System/NoFastMem.info force all
-delete >NIL: SYSTEMDIR:Tools/Commodities/Clicktofront force all
-delete >NIL: SYSTEMDIR:Tools/Commodities/Clicktofront.info force all
-delete >NIL: SYSTEMDIR:Tools/PrepCard.info force all
+; delete obsolete files for amiga os 3.1
+IF NOT "$amigaosversion" EQ "3.1.4"
+  delete >NIL: SYSTEMDIR:S/BRUtab force all
+  delete >NIL: SYSTEMDIR:S/HDBackup.config force all
+  delete >NIL: SYSTEMDIR:Tools/calculator force all
+  delete >NIL: SYSTEMDIR:Tools/calculator.info force all
+  delete >NIL: SYSTEMDIR:Tools/BRU force all
+  delete >NIL: SYSTEMDIR:Tools/HDBackup.help force all
+  delete >NIL: SYSTEMDIR:Tools/HDBackup.info force all
+  delete >NIL: SYSTEMDIR:Tools/HDBackup force all
+  delete >NIL: SYSTEMDIR:Tools/Showconfig.info force all
+  delete >NIL: SYSTEMDIR:Tools/Showconfig force all
+  delete >NIL: SYSTEMDIR:System/NoFastMem force all
+  delete >NIL: SYSTEMDIR:System/NoFastMem.info force all
+  delete >NIL: SYSTEMDIR:Tools/Commodities/Clicktofront force all
+  delete >NIL: SYSTEMDIR:Tools/Commodities/Clicktofront.info force all
+  delete >NIL: SYSTEMDIR:Tools/PrepCard.info force all
+ENDIF
 
-
-; Fix read write execute flags
+; fix read write execute flags
 protect >NIL: SYSTEMDIR:#? +rwe ALL
 
+; fix cbm pure bit bug for amiga os 3.1
+IF NOT "$amigaosversion" EQ "3.1.4"
+  Protect SYSTEMDIR:C/AddBuffers +p
+  Protect SYSTEMDIR:C/AddDataTypes +p
+  Protect SYSTEMDIR:C/Assign +p
+  Protect SYSTEMDIR:C/Avail +p
+  Protect SYSTEMDIR:C/Break +p
+  Protect SYSTEMDIR:C/ChangeTaskPri +p
+  Protect SYSTEMDIR:C/ConClip +p
+  Protect SYSTEMDIR:C/Copy +p
+  Protect SYSTEMDIR:C/CPU +p
+  Protect SYSTEMDIR:C/Date +p
+  Protect SYSTEMDIR:C/Delete +p
+  Protect SYSTEMDIR:C/Dir +p
+  Protect SYSTEMDIR:C/DiskChange +p
+  Protect SYSTEMDIR:C/Ed +p
+  Protect SYSTEMDIR:C/Edit +p
+  Protect SYSTEMDIR:C/Eval +p
+  Protect SYSTEMDIR:C/Execute +p
+  Protect SYSTEMDIR:C/Filenote +p
+  Protect SYSTEMDIR:C/IconX +p
+  Protect SYSTEMDIR:C/Info +p
+  Protect SYSTEMDIR:C/Install +p
+  Protect SYSTEMDIR:C/Join +p
+  Protect SYSTEMDIR:C/List +p
+  Protect SYSTEMDIR:C/Lock +p
+  Protect SYSTEMDIR:C/MagTape +p
+  Protect SYSTEMDIR:C/MakeDir +p
+  Protect SYSTEMDIR:C/MakeLink +p
+  Protect SYSTEMDIR:C/Mount +p
+  Protect SYSTEMDIR:C/Protect +p
+  Protect SYSTEMDIR:C/Relabel +p
+  Protect SYSTEMDIR:C/RemRAD +p
+  Protect SYSTEMDIR:C/Rename +p
+  Protect SYSTEMDIR:C/RequestChoice +p
+  Protect SYSTEMDIR:C/RequestFile +p
+  Protect SYSTEMDIR:C/Search +p
+  Protect SYSTEMDIR:C/SetClock +p
+  Protect SYSTEMDIR:C/SetDate +p
+  Protect SYSTEMDIR:C/SetFont +p
+  Protect SYSTEMDIR:C/SetKeyboard +p
+  Protect SYSTEMDIR:C/Sort +p
+  Protect SYSTEMDIR:C/Status +p
+  Protect SYSTEMDIR:C/Type +p
+  Protect SYSTEMDIR:C/Version +p
+ENDIF
 
-; Fix CBM Pure bit bug
-Protect SYSTEMDIR:C/AddBuffers +p
-Protect SYSTEMDIR:C/AddDataTypes +p
-Protect SYSTEMDIR:C/Assign +p
-Protect SYSTEMDIR:C/Avail +p
-Protect SYSTEMDIR:C/Break +p
-Protect SYSTEMDIR:C/ChangeTaskPri +p
-Protect SYSTEMDIR:C/ConClip +p
-Protect SYSTEMDIR:C/Copy +p
-Protect SYSTEMDIR:C/CPU +p
-Protect SYSTEMDIR:C/Date +p
-Protect SYSTEMDIR:C/Delete +p
-Protect SYSTEMDIR:C/Dir +p
-Protect SYSTEMDIR:C/DiskChange +p
-Protect SYSTEMDIR:C/Ed +p
-Protect SYSTEMDIR:C/Edit +p
-Protect SYSTEMDIR:C/Eval +p
-Protect SYSTEMDIR:C/Execute +p
-Protect SYSTEMDIR:C/Filenote +p
-Protect SYSTEMDIR:C/IconX +p
-Protect SYSTEMDIR:C/Info +p
-Protect SYSTEMDIR:C/Install +p
-Protect SYSTEMDIR:C/Join +p
-Protect SYSTEMDIR:C/List +p
-Protect SYSTEMDIR:C/Lock +p
-Protect SYSTEMDIR:C/MagTape +p
-Protect SYSTEMDIR:C/MakeDir +p
-Protect SYSTEMDIR:C/MakeLink +p
-Protect SYSTEMDIR:C/Mount +p
-Protect SYSTEMDIR:C/Protect +p
-Protect SYSTEMDIR:C/Relabel +p
-Protect SYSTEMDIR:C/RemRAD +p
-Protect SYSTEMDIR:C/Rename +p
-Protect SYSTEMDIR:C/RequestChoice +p
-Protect SYSTEMDIR:C/RequestFile +p
-Protect SYSTEMDIR:C/Search +p
-Protect SYSTEMDIR:C/SetClock +p
-Protect SYSTEMDIR:C/SetDate +p
-Protect SYSTEMDIR:C/SetFont +p
-Protect SYSTEMDIR:C/SetKeyboard +p
-Protect SYSTEMDIR:C/Sort +p
-Protect SYSTEMDIR:C/Status +p
-Protect SYSTEMDIR:C/Type +p
-Protect SYSTEMDIR:C/Version +p
-
-
-; Add the S bit to some scripts
+; add the a bit to some scripts
 Protect SYSTEMDIR:System/Rebooter +s
 Protect SYSTEMDIR:System/HardWiz +s
 Protect SYSTEMDIR:Tools/PrepCard+ +s

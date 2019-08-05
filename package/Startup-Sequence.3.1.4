@@ -1,0 +1,103 @@
+; $VER: Startup-Sequence_HardDrive 40.2 (25.2.93)
+; Startup-Sequence for hard drive systems
+
+; set failat to 21
+FailAt 21
+
+If Exists C:LoadModule
+  C:Version exec.library version 46 >NIL:
+  If Warn
+    C:LoadModule ROMUPDATE
+  EndIf
+
+  ; load scsi.device, if it exists
+  IF EXISTS DEVS:scsi.device
+    ; load scsi.device, if current scsi.device is less than v43.45
+    Version >NIL: "scsi.device" 43 45
+    IF WARN
+      C:LoadModule DEVS:scsi.device
+    ENDIF
+  ENDIF
+EndIf
+
+C:SetPatch QUIET
+C:CPU CHECKINSTALL
+
+C:Version >NIL:
+C:AddBuffers >NIL: DF0: 15
+
+C:PatchRam
+C:MinStack 8192
+C:TagLiFE
+C:PatchWB
+
+C:MakeDir RAM:T RAM:Clipboards RAM:ENV RAM:ENV/Sys
+Assign ENV: RAM:Env
+C:Copy ENVARC:~(#?.info) ENV: ALL QUIET
+
+Resident >NIL: C:Assign PURE
+Resident >NIL: C:Execute PURE
+
+Assign >NIL: T: RAM:T
+Assign >NIL: CLIPS: RAM:Clipboards
+Assign >NIL: REXX: S:
+Assign >NIL: PRINTERS: DEVS:Printers
+Assign >NIL: KEYMAPS: DEVS:Keymaps
+Assign >NIL: LOCALE: SYS:Locale
+Assign >NIL: LIBS: SYS:Classes ADD
+Assign >NIL: HELP: LOCALE:Help DEFER
+
+BindDrivers
+C:Mount >NIL: DEVS:DOSDrivers/~(#?.info)
+
+IF EXISTS DEVS:Monitors
+  IF EXISTS DEVS:Monitors/VGAOnly
+    DEVS:Monitors/VGAOnly
+  EndIF
+
+  C:List >NIL: DEVS:Monitors/~(#?.info|VGAOnly) TO T:M LFORMAT "DEVS:Monitors/%s"
+  Execute T:M
+  C:Delete >NIL: T:M
+EndIF
+
+SetEnv Language "english"
+SetEnv Workbench $Workbench
+SetEnv Kickstart $Kickstart
+UnSet Workbench
+UnSet Kickstart
+
+C:AddDataTypes REFRESH QUIET
+C:IPrefs
+C:ConClip
+C:FastColors
+
+IF EXISTS ENVARC:Sys/def_ramdisk.info
+   Copy ENVARC:Sys/def_ramdisk.info RAM:Disk.info >NIL:
+EndIf
+
+Path >NIL: RAM: C: SYS:Utilities SYS:Rexxc SYS:System S: SYS:Prefs SYS:WBStartup SYS:Tools SYS:Tools/Commodities
+
+
+assign >NIL: exists BootRamDrive:
+if not warn
+LockDevice BootRamDrive: Lock on
+Echo ""
+Echo "WARNING"
+Echo ""
+Echo "System is booting from BootRamDrive:"
+Echo "BootRamDrive will dissapear once you power off your computer."
+Echo "BootRamDrive is set in Read-Only mode."
+Echo ""
+Ask "Press the Return key to continue booting."
+endif
+
+
+IF EXISTS S:User-Startup
+  Execute S:User-Startup
+EndIF
+
+Resident Execute REMOVE
+Resident Assign REMOVE
+
+C:LoadWB
+EndCLI >NIL:

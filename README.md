@@ -61,10 +61,16 @@ The install script for BetterWB Installer is based on S/Startup-Sequence from MI
 - Paths has been changed: SYS: to SYSTEMDIR:.
 - Removed waits for next floppy.
 - Removed ENV-HANDLER patch.
+- Added support for Amiga OS 3.1.4:
+  - Added LoadModule ROMUPDATE to support Kickstart 3.1 being patched to 3.1.4.
+  - Added version checking of DEVS:scsi.device, so it only will be loaded if scsi.device in memory/resident is less than v43.45.
+  - Added install patch Amiga OS 3.1.4.1, if Amiga OS 3.1.4.1 update is installed.
 
 ## Screenshots
 
 Screenshots of BetterWB package.
+
+![BetterWB 3.1.4 1](screenshots/betterwb_3.1.4_1.png?raw=true)
 
 ![BetterWB 1](screenshots/betterwb_1.png?raw=true)
 
