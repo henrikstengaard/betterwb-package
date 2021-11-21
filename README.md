@@ -1,6 +1,6 @@
 # BetterWB Package
 
-BetterWB is an enhancement built for Workbench 3.1 by Gulliver for low end Amigas restricted to 68000 processors.
+BetterWB is an enhancement built for Amiga OS 3.2, 3.1.4 and 3.1 by Gulliver for low end Amigas restricted to 68000 processors.
 
 ## Description
 
@@ -12,22 +12,22 @@ Original version of BetterWB can be downloaded from http://lilliput.amiga-projec
 
 ---
 
-BetterWB is a new workbench pack, much like AIAB, Amikit, AmigaSYS, ClassicWB, etc. but applying a totally different aproach. It aims to be much like an enhancement, an updated extension to AmigaOS 3.1, without all those hardware requirement penalties typically associated with these kind of packs. It is indeed a better 3.1 than 3.1 itself!
+BetterWB is a new workbench pack, much like AIAB, Amikit, AmigaSYS, ClassicWB, etc. but applying a totally different aproach. It aims to be much like an enhancement, an updated extension to AmigaOS 3.2, 3.1.4 or 3.1, without all those hardware requirement penalties typically associated with these kind of packs. It is indeed a better 3.2, 3.1.4 or 3.1 than 3.2, 3.1.4 or 3.1 itself!
 
 **BetterWB best targets:**
 
-- Purists that believe anything beyond 3.1 is an overbloated piece of crap.
+- Purists that believe anything beyond 3.2, 3.1.4 or 3.1 is an overbloated piece of crap.
 - Low end Amiga computers that are left in storage deprived from any usage, and only regarded as antiques.
 - Users that refuse to pay big bucks in order to be able to somehow upgrade their Amiga workbench experience.
 - Minimig users, that are restricted to a 68000 processor.
-- Anyone that wishes a clean AmigaOS 3.1 like experience.
+- Anyone that wishes a clean AmigaOS 3.2, 3.1.4 or 3.1 like experience.
 
 **Advantages:**
 
 - Works on any Amiga.
 - It occupies less than 10MB on a harddrive.
 - It is distributed as a set of floppy images.
-- Its usage is simple and bares a high resemblance to an ordinary 3.1 install.
+- Its usage is simple and bares a high resemblance to an ordinary 3.2, 3.1.4 or 3.1 install.
 
 **Drawbacks:**
 
@@ -36,7 +36,7 @@ BetterWB is a new workbench pack, much like AIAB, Amikit, AmigaSYS, ClassicWB, e
 
 ## Requirements
 
-BetterWB package can be installed on any Amiga with Workbench 3.1 and about 10MB free space on a harddrive for installation.
+BetterWB package can be installed on any Amiga with Amiga OS 3.2, 3.1.4 or 3.1 and about 10MB free space on a harddrive for installation.
 
 ## Installation
 
@@ -61,14 +61,17 @@ The install script for BetterWB Installer is based on S/Startup-Sequence from MI
 - Paths has been changed: SYS: to SYSTEMDIR:.
 - Removed waits for next floppy.
 - Removed ENV-HANDLER patch.
-- Added support for Amiga OS 3.1.4:
-  - Added LoadModule ROMUPDATE to support Kickstart 3.1 being patched to 3.1.4.
-  - Added version checking of DEVS:scsi.device, so it only will be loaded if scsi.device in memory/resident is less than v43.45.
-  - Added install patch Amiga OS 3.1.4.1, if Amiga OS 3.1.4.1 update is installed.
+- Creates backup of startup sequence as "S:Startup-Sequence.BAK".
+- Creates backup of user startup as "S:User-Startup.BAK".
+- Creates backup of BetterWB original startup sequence as "S:Startup-Sequence.BW".
+- Creates backup of BetterWB original user startup as "S:User-Startup.BW".
+- Patch startup sequence and user startup with BerrerWB changes for generic support with any Amiga OS instead of overwriting files. Currently tested with Amiga OS 3.2, 3.1.4 and 3.1.
 
 ## Screenshots
 
 Screenshots of BetterWB package.
+
+![BetterWB 3.2 1](screenshots/betterwb_3.2_1.png?raw=true)
 
 ![BetterWB 3.1.4 1](screenshots/betterwb_3.1.4_1.png?raw=true)
 

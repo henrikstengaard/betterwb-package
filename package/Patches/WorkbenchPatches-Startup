@@ -1,0 +1,8 @@
+; Workbench Patches Startup
+; -------------------------
+
+C:FastColors
+
+IF EXISTS ENVARC:Sys/def_ramdisk.info
+   Copy ENVARC:Sys/def_ramdisk.info RAM:Disk.info >NIL:
+EndIf

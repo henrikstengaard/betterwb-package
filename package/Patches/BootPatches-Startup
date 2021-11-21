@@ -1,0 +1,18 @@
+; Boot Patches Startup
+; --------------------
+
+IF EXISTS C:PatchRam
+  C:PatchRam
+ENDIF
+
+IF EXISTS C:MinStack
+  C:MinStack 8192
+ENDIF
+
+IF EXISTS C:TagLiFE
+  C:TagLiFE
+ENDIF
+
+IF EXISTS C:PatchWB
+  C:PatchWB
+ENDIF

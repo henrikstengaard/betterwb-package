@@ -1,0 +1,4 @@
+; execute workbench patches startup, if it exists
+IF EXISTS S:WorkbenchPatches-Startup
+  Execute S:WorkbenchPatches-Startup
+ENDIF

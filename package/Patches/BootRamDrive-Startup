@@ -1,0 +1,12 @@
+assign >NIL: exists BootRamDrive:
+if not warn
+LockDevice BootRamDrive: Lock on
+Echo ""
+Echo "WARNING"
+Echo ""
+Echo "System is booting from BootRamDrive:"
+Echo "BootRamDrive will dissapear once you power off your computer."
+Echo "BootRamDrive is set in Read-Only mode."
+Echo ""
+Ask "Press the Return key to continue booting."
+endif
