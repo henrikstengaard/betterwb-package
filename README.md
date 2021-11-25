@@ -4,7 +4,7 @@ BetterWB is an enhancement built for Amiga OS 3.2, 3.1.4 and 3.1 by Gulliver for
 
 ## Description
 
-BetterWB Package contains BetterWB v4.0 created by Gulliver from EAB.
+BetterWB Package contains BetterWB v4.3 created by Gulliver from EAB.
 
 With permission from Gulliver it has been converted to a package for HstWB Installer.
 
