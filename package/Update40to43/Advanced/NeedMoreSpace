@@ -1,0 +1,15 @@
+echo "BetterWB component removal. Please wait a few minutes..."
+
+; Here goes whatever files/dirs we need to delete
+
+delete >nil: SYS:Prefs/Presets/Iconsets force all
+delete >nil: SYS:Storage/Printers force all
+delete >nil: SYS:Locale/Help force all
+
+echo "Deleted: printer drivers, documentation and iconsets"
+echo "About 3.4MB of HDD space have been freed"
+echo ""
+echo "Operation complete."
+echo "Now remove all floppies and reboot"
+
+wait 5 sec

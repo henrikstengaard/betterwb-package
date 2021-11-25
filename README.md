@@ -61,11 +61,14 @@ The install script for BetterWB Installer is based on S/Startup-Sequence from MI
 - Paths has been changed: SYS: to SYSTEMDIR:.
 - Removed waits for next floppy.
 - Removed ENV-HANDLER patch.
+
+Installation makes following changes:
+
 - Creates backup of startup sequence as "S:Startup-Sequence.BAK".
 - Creates backup of user startup as "S:User-Startup.BAK".
+- Patch startup sequence and user startup with BetterWB support for best Amiga OS compatibility with existing and future versions.
 - Creates backup of BetterWB original startup sequence as "S:Startup-Sequence.BW".
 - Creates backup of BetterWB original user startup as "S:User-Startup.BW".
-- Patch startup sequence and user startup with BerrerWB changes for generic support with any Amiga OS instead of overwriting files. Currently tested with Amiga OS 3.2, 3.1.4 and 3.1.
 
 ## Screenshots
 

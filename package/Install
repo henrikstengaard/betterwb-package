@@ -2,15 +2,21 @@
 ; -------------------------------
 ;
 ; Author: Henrik Noerfjand Stengaard
-; Date: 2021-11-20
+; Date: 2021-11-24
 ;
-; This script extracts and installs zip files for BetterWB Package. 
+; AmigaDOS script to extract and install BetterWB Package for Amiga OS 3.2, 3.1.4 and 3.1.
+; For Amiga OS 3.1 rep command is used instead of edit due to edit truncating lines, therefore only rep is used.
 ;
+; Installation makes following changes:
 ; - Creates backup of startup sequence as "S:Startup-Sequence.BAK".
 ; - Creates backup of user startup as "S:User-Startup.BAK".
+; - Patch startup sequence and user startup with BetterWB support for best Amiga OS compatibility with existing and future versions.
 ; - Creates backup of BetterWB original startup sequence as "S:Startup-Sequence.BW".
 ; - Creates backup of BetterWB original user startup as "S:User-Startup.BW".
-; - Patch startup sequence and user startup with BerrerWB changes for generic support with any Amiga OS instead of overwriting files. Currently tested with Amiga OS 3.2, 3.1.4 and 3.1.
+
+; default set use edit to 0
+set useedit "0"
+
 
 ; Copy readme and screenshots to locale help for BetterWB
 IF NOT EXISTS SYSTEMDIR:Locale/Help/BetterWB
@@ -85,17 +91,7 @@ ENDIF
 ; copy betterwb help to systemdir 
 copy >NIL: PACKAGEDIR:BetterWB.readme.txt#? SYSTEMDIR:Locale/Help
 
-IF NOT "$amigaosversion" EQ "3.1"
-  ; extract excluding files conflicting with amiga os 3.2 and 3.1.4 
-  echo "Installing 'MISC31 #1'..."
-  unzip -qq -o -x PACKAGEDIR:BetterWB1.zip -d SYSTEMDIR: -x *Avail *Copy *Dir *makelink *SetPatch *Version *FastFileSystem
-
-  echo "Installing 'TOOLS31 #2'..."
-  unzip -qq -o -x PACKAGEDIR:BetterWB2.zip -d SYSTEMDIR: -x *Installer
-
-  echo "Installing 'BONUS31 #3'..."
-  unzip -qq -o -x PACKAGEDIR:BetterWB3.zip -d SYSTEMDIR: -x *icon.library *version.library
-ELSE
+IF "$amigaosversion" EQ "3.1"
   echo "Installing 'MISC31 #1'..."
   unzip -qq -o -x PACKAGEDIR:BetterWB1.zip -d SYSTEMDIR:
 
@@ -104,87 +100,17 @@ ELSE
 
   echo "Installing 'BONUS31 #3'..."
   unzip -qq -o -x PACKAGEDIR:BetterWB3.zip -d SYSTEMDIR:
-ENDIF
-
-; create backup of betterwb startup sequence
-IF EXISTS SYSTEMDIR:S/Startup-Sequence
-  Copy >NIL: SYSTEMDIR:S/Startup-Sequence SYSTEMDIR:S/Startup-Sequence.BW
-ENDIF
-
-; create backup of betterwb user startup
-IF EXISTS SYSTEMDIR:S/User-Startup
-  Copy >NIL: SYSTEMDIR:S/User-Startup SYSTEMDIR:S/User-Startup.BW
-ENDIF
-
-; restore startup sequence backup
-Copy >NIL: SYSTEMDIR:S/Startup-Sequence.BAK SYSTEMDIR:S/Startup-Sequence
-
-; restore user startup or create user startup backup, if it doesn't exist
-IF EXISTS SYSTEMDIR:S/User-Startup.BAK
-  Copy >NIL: SYSTEMDIR:S/User-Startup.BAK SYSTEMDIR:S/User-Startup
 ELSE
-  Echo "" NOLINE >SYSTEMDIR:S/User-Startup
+  ; extract excluding files conflicting with amiga os 3.2 and 3.1.4 
+  echo "Installing 'MISC31 #1'..."
+  unzip -qq -o -x PACKAGEDIR:BetterWB1.zip -d SYSTEMDIR: -x *Avail *Copy *Dir *makelink *SetPatch *Version *FastFileSystem
+
+  echo "Installing 'TOOLS31 #2'..."
+  unzip -qq -o -x PACKAGEDIR:BetterWB2.zip -d SYSTEMDIR: -x *Installer
+
+  echo "Installing 'BONUS31 #3'..."
+  unzip -qq -o -x PACKAGEDIR:BetterWB3.zip -d SYSTEMDIR: -x *diskfont.library *mathieeedoubbas.library *mathtrans.library *icon.library *version.library *rexxsyslib.library *bmp.datatype *cdxl.datatype *gif.datatype *ilbm.datatype *png.datatype *wav.datatype *serial.device
 ENDIF
-
-; add boot patches startup to startup sequence, if not present
-Search >NIL: SYSTEMDIR:S/Startup-Sequence "BindDrivers" quiet
-IF $RC EQ 0 VAL
-  ; add boot patches startup to startup sequence after "BindDrivers", if not present
-  Search >NIL: SYSTEMDIR:S/Startup-Sequence "S:BootPatches-Startup" quiet
-  IF NOT $RC EQ 0 VAL
-    Edit SYSTEMDIR:S/Startup-Sequence OPT P70 with PACKAGEDIR:Patches/Add-BootPatches-Startup.edit
-  ENDIF
-ELSE
-  echo "*e[1mError: Unable to add boot patches startup, 'BindDrivers'*Nnot found in startup sequence.*NBoot patches startup can't be installed without this!*e[0m"
-  ask "Press ENTER to continue"
-ENDIF
-
-; copy boot patches startup
-copy >NIL: PACKAGEDIR:Patches/BootPatches-Startup SYSTEMDIR:S
-
-; disable patch ram, min stack, taglife, patch bw, if not amiga os 3.1
-IF NOT "$amigaosversion" EQ "3.1"
-  IF EXISTS C:PatchRam
-    Rename >NIL: C:PatchRam C:PatchRam_disabled
-  ENDIF
-
-  IF EXISTS C:MinStack
-    Rename >NIL: C:MinStack C:MinStack_disabled
-  ENDIF
-
-  IF EXISTS C:TagLiFE
-    Rename >NIL: C:TagLiFE C:TagLiFE_disabled
-  ENDIF
-
-  IF EXISTS C:PatchWB
-    Rename >NIL: C:PatchWB C:PatchWB_disabled
-  ENDIF
-ENDIF
-
-; add boot ram drive startup to startup sequence, if not present
-Search >NIL: SYSTEMDIR:S/Startup-Sequence "S:User-Startup" quiet
-IF $RC EQ 0 VAL
-  ; add boot ram drive startup to startup sequence before "S:User-Startup", if not present
-  Search >NIL: SYSTEMDIR:S/Startup-Sequence "S:BootRamDrive-Startup" quiet
-  IF NOT $RC EQ 0 VAL
-    Edit SYSTEMDIR:S/Startup-Sequence OPT P70 with PACKAGEDIR:Patches/Add-BootRamDrive.edit
-  ENDIF
-ELSE
-  echo "*e[1mError: Unable to add boot ram drive startup, 'S:User-Startup'*Nnot found in startup sequence.*NBoot ram drive startup can't be installed without this!*e[0m"
-  ask "Press ENTER to continue"
-ENDIF
-
-; copy boot ram drive startup
-copy >NIL: PACKAGEDIR:Patches/BootRamDrive-Startup SYSTEMDIR:S
-
-; add workbench patches startup to user startup, if not present
-Search >NIL: SYSTEMDIR:S/User-Startup "Execute S:WorkbenchPatches-Startup" quiet
-IF NOT $RC EQ 0 VAL
-  Type PACKAGEDIR:Patches/Add-WorkbenchPatches >>SYSTEMDIR:S/User-Startup
-ENDIF
-
-; copy workbench patches startup
-copy >NIL: PACKAGEDIR:Patches/WorkbenchPatches-Startup SYSTEMDIR:S
 
 ; Fix read write execute flags (for unzip being overwritten)
 protect >NIL: SYSTEMDIR:C/UnZip +rwe
@@ -197,13 +123,6 @@ unzip -qq -o -x PACKAGEDIR:BetterWB5.zip -d SYSTEMDIR:
 
 echo "Installing 'DRIVERS31 #6'..."
 unzip -qq -o -x PACKAGEDIR:BetterWB6.zip -d SYSTEMDIR:
-
-IF "$amigaosversion" EQ "3.1.4"
-  ; install patch amiga os 3.1.4.1, if it exists
-  IF EXISTS "SYSTEMDIR:S/Install-Patch-Amiga-OS-3141"
-    Execute "SYSTEMDIR:S/Install-Patch-Amiga-OS-3141" SYS SYSTEMDIR QUIET
-  ENDIF
-ENDIF
 
 ; delete obsolete files for amiga os 3.1
 IF "$amigaosversion" EQ "3.1"
@@ -278,6 +197,111 @@ ENDIF
 Protect SYSTEMDIR:System/Rebooter +s
 Protect SYSTEMDIR:System/HardWiz +s
 Protect SYSTEMDIR:Tools/PrepCard+ +s
+
+; install update v4.0 to v4.3
+echo "Installing 'Update40to43'..."
+
+delete >nil: SYSTEMDIR:Locale/Help/mathtrans.doc force
+copy >nil: PACKAGEDIR:Update40to43/BetterWB.readme.txt SYSTEMDIR:Locale/Help force 
+
+IF "$amigaosversion" EQ "3.1"
+  unzip -qq -o -x PACKAGEDIR:Update40to43/Update.zip -d SYSTEMDIR:
+ELSE
+  unzip -qq -o -x PACKAGEDIR:Update40to43/Update.zip -d SYSTEMDIR: -x *mathtrans.library *icon.library
+ENDIF
+
+Protect >NIL: SYSTEMDIR:#? +rwe ALL
+Protect SYSTEMDIR:system/Rebooter +s
+Protect SYSTEMDIR:system/HardWiz +s
+Protect SYSTEMDIR:tools/PrepCard+ +s
+
+; create backup of betterwb startup sequence
+IF EXISTS SYSTEMDIR:S/Startup-Sequence
+  Copy >NIL: SYSTEMDIR:S/Startup-Sequence SYSTEMDIR:S/Startup-Sequence.BW
+ENDIF
+
+; create backup of betterwb user startup
+IF EXISTS SYSTEMDIR:S/User-Startup
+  Copy >NIL: SYSTEMDIR:S/User-Startup SYSTEMDIR:S/User-Startup.BW
+ENDIF
+
+; restore startup sequence backup
+Copy >NIL: SYSTEMDIR:S/Startup-Sequence.BAK SYSTEMDIR:S/Startup-Sequence
+
+; restore user startup or create user startup backup, if it doesn't exist
+IF EXISTS SYSTEMDIR:S/User-Startup.BAK
+  Copy >NIL: SYSTEMDIR:S/User-Startup.BAK SYSTEMDIR:S/User-Startup
+ELSE
+  Echo "" NOLINE >SYSTEMDIR:S/User-Startup
+ENDIF
+
+; add boot patches startup to startup sequence, if not present
+Search >NIL: SYSTEMDIR:S/Startup-Sequence "BindDrivers" quiet
+IF $RC EQ 0 VAL
+  ; add boot patches startup to startup sequence after "BindDrivers", if not present
+  Search >NIL: SYSTEMDIR:S/Startup-Sequence "S:BootPatches-Startup" quiet
+  IF NOT $RC EQ 0 VAL
+    IF "$useedit" EQ 1 VAL
+      Edit SYSTEMDIR:S/Startup-Sequence OPT P70 with PACKAGEDIR:Patches/Add-BootPatches-Startup.edit
+    ELSE
+      rep SYSTEMDIR:S/Startup-Sequence "BindDrivers" "IF EXISTS S:BootPatches-Startup*N  Execute S:BootPatches-Startup*NENDIF*NBindDrivers"
+    ENDIF
+  ENDIF
+ELSE
+  echo "*e[1mError: Unable to add boot patches startup,*N'BindDrivers'*Nnot found in startup sequence.*NBoot patches startup can't be installed without this!*e[0m"
+  ask "Press ENTER to continue"
+ENDIF
+
+; copy boot patches startup
+copy >NIL: PACKAGEDIR:Patches/BootPatches-Startup SYSTEMDIR:S
+
+; disable patch ram, min stack, taglife, patch bw, if not amiga os 3.1
+IF NOT "$amigaosversion" EQ "3.1"
+  IF EXISTS C:PatchRam
+    Rename >NIL: C:PatchRam C:PatchRam_disabled
+  ENDIF
+
+  IF EXISTS C:MinStack
+    Rename >NIL: C:MinStack C:MinStack_disabled
+  ENDIF
+
+  IF EXISTS C:TagLiFE
+    Rename >NIL: C:TagLiFE C:TagLiFE_disabled
+  ENDIF
+
+  IF EXISTS C:PatchWB
+    Rename >NIL: C:PatchWB C:PatchWB_disabled
+  ENDIF
+ENDIF
+
+; add boot ram drive startup to startup sequence, if not present
+Search >NIL: SYSTEMDIR:S/Startup-Sequence "IF EXISTS S:User-Startup" quiet
+IF $RC EQ 0 VAL
+  ; add boot ram drive startup to startup sequence before "S:User-Startup", if not present
+  Search >NIL: SYSTEMDIR:S/Startup-Sequence "S:BootRamDrive-Startup" quiet
+  IF NOT $RC EQ 0 VAL
+    IF "$useedit" EQ 1 VAL
+      Edit SYSTEMDIR:S/Startup-Sequence OPT P70 with PACKAGEDIR:Patches/Add-BootRamDrive.edit
+    ELSE
+      rep SYSTEMDIR:S/Startup-Sequence "IF EXISTS S:User-Startup" "IF EXISTS S:BootRamDrive-Startup*N  Execute S:BootRamDrive-Startup*NEndIf*NIF EXISTS S:User-Startup"
+    ENDIF
+  ENDIF
+ELSE
+  echo "*e[1mError: Unable to add boot ram drive startup,*N'IF EXISTS S:User-Startup'*Nnot found in startup sequence.*NBoot ram drive startup can't be installed without this!*e[0m"
+  ask "Press ENTER to continue"
+ENDIF
+
+; copy boot ram drive startup
+copy >NIL: PACKAGEDIR:Patches/BootRamDrive-Startup SYSTEMDIR:S
+
+; add workbench patches startup to user startup, if not present
+Search >NIL: SYSTEMDIR:S/User-Startup "Execute S:WorkbenchPatches-Startup" quiet
+IF NOT $RC EQ 0 VAL
+  Type PACKAGEDIR:Patches/Add-WorkbenchPatches >>SYSTEMDIR:S/User-Startup
+ENDIF
+
+; copy workbench patches startup
+copy >NIL: PACKAGEDIR:Patches/WorkbenchPatches-Startup SYSTEMDIR:S
 
 ; set harddisk icon
 set harddiskicon "SYSTEMDIR:Disk.info"

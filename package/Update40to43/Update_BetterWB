@@ -1,0 +1,31 @@
+echo "Updating BetterWB. Please wait a few minutes..."
+
+Resident >NIL: unzip PURE
+SetEnv TZ MST7
+
+; Here goes whatever files/dirs we need to delete
+
+delete >nil: SYS:Locale/Help/mathtrans.doc force
+
+; Backup the startup-sequence before we change anything
+
+;copy >nil: sys:s/startup-sequence sys:s/startup-sequence.old 
+
+; Now lets do what we came here for!
+
+copy >nil: Update40to43:BetterWB.readme.txt SYS:Locale/Help force
+
+unzip -o Update.zip -d SYS:
+
+protect SYS:#? +rwe ALL
+protect sys:system/Rebooter +s
+protect sys:system/HardWiz +s
+protect sys:tools/PrepCard+ +s
+
+echo ""
+echo ""
+echo ""
+echo "Update complete."
+echo "Now remove all floppies and reboot"
+
+wait 5 sec
