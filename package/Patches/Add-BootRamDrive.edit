@@ -1,8 +1,0 @@
-F/Execute S:User-Startup/
-P
-I
-IF EXISTS S:BootRamDrive-Startup
-  Execute S:BootRamDrive-Startup
-ENDIF
-Z
-W

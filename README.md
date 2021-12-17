@@ -66,17 +66,21 @@ Installation makes following changes:
 
 - Creates backup of startup sequence as "S:Startup-Sequence.BAK".
 - Creates backup of user startup as "S:User-Startup.BAK".
-- Patch startup sequence and user startup with BetterWB support for best Amiga OS compatibility with existing and future versions.
-- Creates backup of BetterWB original startup sequence as "S:Startup-Sequence.BW".
-- Creates backup of BetterWB original user startup as "S:User-Startup.BW".
+- Creates backup of original BetterWB startup sequence as "S:Startup-Sequence.BW".
+- Creates backup of original BetterWB user startup as "S:User-Startup.BW".
+- Patch startup sequence and user startup with BetterWB changes for best Amiga OS compatibility with existing and future versions.
 
 ## Screenshots
 
-Screenshots of BetterWB package.
+Screenshots of BetterWB installed with Amiga OS 3.2.
 
 ![BetterWB 3.2 1](screenshots/betterwb_3.2_1.png?raw=true)
 
+Screenshots of BetterWB installed with Amiga OS 3.1.4.
+
 ![BetterWB 3.1.4 1](screenshots/betterwb_3.1.4_1.png?raw=true)
+
+Screenshots of BetterWB installed with Amiga OS 3.1.
 
 ![BetterWB 1](screenshots/betterwb_1.png?raw=true)
 

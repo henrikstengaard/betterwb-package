@@ -2,7 +2,7 @@
 ; -------------------------------
 ;
 ; Author: Henrik Noerfjand Stengaard
-; Date: 2021-11-24
+; Date: 2021-12-17
 ;
 ; AmigaDOS script to extract and install BetterWB v4.3 for Amiga OS 3.2, 3.1.4 and 3.1.
 ; For Amiga OS 3.1 rep command is used instead of edit due to edit truncating lines, therefore only rep is used.
@@ -10,12 +10,9 @@
 ; Installation makes following changes:
 ; - Creates backup of startup sequence as "S:Startup-Sequence.BAK".
 ; - Creates backup of user startup as "S:User-Startup.BAK".
-; - Patch startup sequence and user startup with BetterWB support for best Amiga OS compatibility with existing and future versions.
-; - Creates backup of BetterWB original startup sequence as "S:Startup-Sequence.BW".
-; - Creates backup of BetterWB original user startup as "S:User-Startup.BW".
-
-; default set use edit to 0
-set useedit "0"
+; - Creates backup of original BetterWB startup sequence as "S:Startup-Sequence.BW".
+; - Creates backup of original BetterWB user startup as "S:User-Startup.BW".
+; - Patch startup sequence and user startup with BetterWB changes for best Amiga OS compatibility with existing and future versions.
 
 
 ; Copy readme and screenshots to locale help for BetterWB
@@ -235,22 +232,23 @@ ELSE
   Echo "" NOLINE >SYSTEMDIR:S/User-Startup
 ENDIF
 
-; add boot patches startup to startup sequence, if not present
-Search >NIL: SYSTEMDIR:S/Startup-Sequence "BindDrivers" quiet
+; find bind drivers in startup sequence
+Search SYSTEMDIR:S/Startup-Sequence "BindDrivers" NONUM >T:_binddrivers1
 IF $RC EQ 0 VAL
   ; add boot patches startup to startup sequence after "BindDrivers", if not present
   Search >NIL: SYSTEMDIR:S/Startup-Sequence "S:BootPatches-Startup" quiet
   IF NOT $RC EQ 0 VAL
-    IF "$useedit" EQ 1 VAL
-      Edit SYSTEMDIR:S/Startup-Sequence OPT P70 with PACKAGEDIR:Patches/Add-BootPatches-Startup.edit
-    ELSE
-      rep SYSTEMDIR:S/Startup-Sequence "BindDrivers" "IF EXISTS S:BootPatches-Startup*N  Execute S:BootPatches-Startup*NENDIF*NBindDrivers"
-    ENDIF
+    ; get found binddrivers text
+    sed "1q;d" T:_binddrivers1 >T:_binddrivers2
+    set binddrivers `sed "1q;d" T:_binddrivers2`
+
+    rep SYSTEMDIR:S/Startup-Sequence "$binddrivers" "IF EXISTS S:BootPatches-Startup*N  Execute S:BootPatches-Startup*NEndIf*N$binddrivers"
   ENDIF
 ELSE
   echo "*e[1mError: Unable to add boot patches startup,*N'BindDrivers'*Nnot found in startup sequence.*NBoot patches startup can't be installed without this!*e[0m"
   ask "Press ENTER to continue"
 ENDIF
+Delete >NIL: T:_binddrivers#?
 
 ; copy boot patches startup
 copy >NIL: PACKAGEDIR:Patches/BootPatches-Startup SYSTEMDIR:S
@@ -275,21 +273,22 @@ IF NOT "$amigaosversion" EQ "3.1"
 ENDIF
 
 ; add boot ram drive startup to startup sequence, if not present
-Search >NIL: SYSTEMDIR:S/Startup-Sequence "IF EXISTS S:User-Startup" quiet
+Search SYSTEMDIR:S/Startup-Sequence "IF EXISTS S:User-Startup" NONUM >T:_userstartup1
 IF $RC EQ 0 VAL
   ; add boot ram drive startup to startup sequence before "S:User-Startup", if not present
   Search >NIL: SYSTEMDIR:S/Startup-Sequence "S:BootRamDrive-Startup" quiet
   IF NOT $RC EQ 0 VAL
-    IF "$useedit" EQ 1 VAL
-      Edit SYSTEMDIR:S/Startup-Sequence OPT P70 with PACKAGEDIR:Patches/Add-BootRamDrive.edit
-    ELSE
-      rep SYSTEMDIR:S/Startup-Sequence "IF EXISTS S:User-Startup" "IF EXISTS S:BootRamDrive-Startup*N  Execute S:BootRamDrive-Startup*NEndIf*NIF EXISTS S:User-Startup"
-    ENDIF
+    ; get found user startup text
+    sed "1q;d" T:_userstartup1 >T:_userstartup2
+    set userstartup `sed "1q;d" T:_userstartup2`
+
+    rep SYSTEMDIR:S/Startup-Sequence "$userstartup" "IF EXISTS S:BootRamDrive-Startup*N  Execute S:BootRamDrive-Startup*NEndIf*N$userstartup"
   ENDIF
 ELSE
   echo "*e[1mError: Unable to add boot ram drive startup,*N'IF EXISTS S:User-Startup'*Nnot found in startup sequence.*NBoot ram drive startup can't be installed without this!*e[0m"
   ask "Press ENTER to continue"
 ENDIF
+Delete >NIL: T:_userstartup#?
 
 ; copy boot ram drive startup
 copy >NIL: PACKAGEDIR:Patches/BootRamDrive-Startup SYSTEMDIR:S
